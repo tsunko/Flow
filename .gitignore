@@ -1,0 +1,8 @@
+# ignore Intellij folder
+.idea/
+
+# ignore output folder
+out/
+
+# ignore all .iml files
+*.iml
