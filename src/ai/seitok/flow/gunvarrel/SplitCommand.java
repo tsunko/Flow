@@ -2,6 +2,7 @@ package ai.seitok.flow.gunvarrel;
 
 import ai.seitok.flow.Flow;
 import ai.seitok.flow.FlowCommand;
+import ai.seitok.flow.env.Channel;
 import ai.seitok.flow.env.Invoker;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,11 +24,11 @@ class SplitCommand extends Command {
     }
 
     @Override
-    public void execute(Invoker invoker, Flow flow){
+    public void execute(Invoker invoker, Channel channel, Flow flow){
         if(!checkPermission(invoker)) return;
 
         try {
-            method.invoke(ref, invoker, flow); // apply any changes the parent method to the invoker and flow (bad)
+            method.invoke(ref, invoker, channel, flow); // apply any changes the parent method to the invoker and flow (bad)
         } catch (IllegalAccessException | InvocationTargetException e){
             e.printStackTrace(); // TODO: make this not this
         }
@@ -40,7 +41,7 @@ class SplitCommand extends Command {
         }
 
         try {
-            subMethod.invoke(ref, invoker, flow); // now pass the maybe-modified invoker/flow to the sub-command method
+            subMethod.invoke(ref, invoker, channel, flow); // now pass the maybe-modified invoker/flow to the sub-command method
         } catch (IllegalAccessException | InvocationTargetException e){
             e.printStackTrace(); // TODO: make this not this
         }

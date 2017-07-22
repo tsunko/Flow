@@ -1,6 +1,10 @@
 package ai.seitok.flow.env;
 
-public interface Invoker extends Messagable {
+/**
+ * Represents an entity executing a command
+ * @param <U> The underlying implementation type.
+ */
+public interface Invoker<U> extends Messagable, Wrapper<U> {
 
     /**
      * @return The name of the invoker
@@ -13,21 +17,10 @@ public interface Invoker extends Messagable {
     String getID();
 
     /**
-     * @return The channel (if any) that the Invoker is currently in.
-     */
-    Channel getChannel();
-
-    /**
      * Verifies if the invoker has permission to continue invocation.
      * @param permission The permission identifier
      * @return <code>true</code> if the invoker had permission; false otherwise.
      */
     boolean hasPermission(String permission);
-
-    /**
-     * Provide a way to access the underlying implementation of this Invoker
-     * @return The underlying invoker. Take care of it.
-     */
-    Object getUnderlyingImpl();
 
 }

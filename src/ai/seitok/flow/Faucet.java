@@ -1,5 +1,6 @@
 package ai.seitok.flow;
 
+import ai.seitok.flow.env.Channel;
 import ai.seitok.flow.env.Invoker;
 import ai.seitok.flow.gunvarrel.Gunvarrel;
 import ai.seitok.flow.gunvarrel.Registerer;
@@ -62,11 +63,12 @@ public final class Faucet {
      * Simply call this in place for where normal command look-up and execution logic would be.
      * @param command The command name to invoke
      * @param invoker An instance/implementation of Invoker
+     * @param chan The channel that this command was processed in
      * @param flow An instance/implementation of Flow
      * @return <code>true</code> if the command was found and processed successfully, <code>false</code> otherwise
      */
-    public static boolean process(String command, Invoker invoker, Flow flow){
-        return instance.loader.findAndExecute(command, invoker, flow);
+    public static boolean process(String command, Invoker invoker, Channel chan, Flow flow){
+        return instance.loader.findAndExecute(command, invoker, chan, flow);
     }
 
 }

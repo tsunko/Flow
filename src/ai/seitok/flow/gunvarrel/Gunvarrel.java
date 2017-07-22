@@ -3,6 +3,7 @@ package ai.seitok.flow.gunvarrel;
 import ai.seitok.flow.Flow;
 import ai.seitok.flow.FlowCommand;
 import ai.seitok.flow.FlowSplitCommand;
+import ai.seitok.flow.env.Channel;
 import ai.seitok.flow.env.Invoker;
 
 import java.lang.reflect.Method;
@@ -74,11 +75,11 @@ public class Gunvarrel implements Loader, Executor {
     }
 
     @Override
-    public boolean findAndExecute(String commandName, Invoker invoker, Flow flow) {
+    public boolean findAndExecute(String commandName, Invoker invoker, Channel chan, Flow flow) {
         Command cmd = reg.getCommand(commandName);
         if(cmd == null)
             return false;
-        cmd.execute(invoker, flow);
+        cmd.execute(invoker, chan, flow);
         return true;
     }
 
@@ -91,13 +92,14 @@ public class Gunvarrel implements Loader, Executor {
 
         Stream.of(toUnreg).forEach(reg::unregister);
 
-        return Stream.of(toUnreg).map(cmd -> cmd.getName()).collect(Collectors.toList());
+        return Stream.of(toUnreg).map(Command::getName).collect(Collectors.toList());
     }
 
     private final boolean isValidMethodParams(Class<?>[] params){
-        return params.length == 2 &&
-                params[0] == Invoker.class &&
-                params[1] == Flow.class;
+        return params.length == 3 &&
+                Invoker.class.isAssignableFrom(params[0]) &&
+                Channel.class.isAssignableFrom(params[1]) &&
+                Flow.class.isAssignableFrom(params[2]) ;
     }
 
 }

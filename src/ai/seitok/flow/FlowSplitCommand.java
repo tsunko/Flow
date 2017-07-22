@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * Using FlowSplitCommand, we can define the given commands as:
  * <p>
  * <code>
- *     public void members$add(Invoker i, Flow f){
+ *     public void members$add(Invoker i, Channel c, Flow f){
  *         // ... do member adding logic ...
  *     }
  * </code>
@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
  *
  * <p>
  * <code>
- *     public void members$remove(Invoker i, Flow f){
+ *     public void members$remove(Invoker i, Channel c, Flow f){
  *         // ... do member removing logic ...
  *     }
  * </code>

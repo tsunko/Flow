@@ -5,18 +5,16 @@ import ai.seitok.flow.env.Invoker;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
-public class TestChannel implements Channel {
+public class TestChannel implements Channel<TestChannel.TestChannelUnderlying> {
 
     private final TestChannelUnderlying internal = new TestChannelUnderlying();
     private final Invoker[] members;
 
     public TestChannel(Invoker[] members){
         for(int i=0; i < members.length; i++){
-            members[i] = new TestInvoker(this);
+            members[i] = new TestInvoker();
         }
         this.members = members;
     }
@@ -32,12 +30,12 @@ public class TestChannel implements Channel {
     }
 
     @Override
-    public Stream<Invoker> getAllMembers(){
+    public Stream<Invoker<?>> getAllMembers(){
         return Stream.of(members);
     }
 
     @Override
-    public Object getUnderlyingImpl(){
+    public TestChannel.TestChannelUnderlying getRaw(){
         return internal;
     }
 

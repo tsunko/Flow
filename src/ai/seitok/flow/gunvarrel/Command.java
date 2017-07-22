@@ -4,6 +4,7 @@ import ai.seitok.flow.Flow;
 import ai.seitok.flow.FlowCommand;
 import ai.seitok.flow.FlowException;
 import ai.seitok.flow.FlowEmptyException;
+import ai.seitok.flow.env.Channel;
 import ai.seitok.flow.env.Invoker;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,11 +28,11 @@ class Command {
         this.method = method;
     }
 
-    public void execute(Invoker invoker, Flow flow){
+    public void execute(Invoker invoker, Channel chan, Flow flow){
         if(!checkPermission(invoker)) return;
 
         try {
-            method.invoke(ref, invoker, flow);
+            method.invoke(ref, invoker, chan, flow);
         } catch (IllegalAccessException | InvocationTargetException e){
             if(e.getCause() instanceof FlowException || e.getCause() instanceof FlowEmptyException){
                 invoker.sendMessage("Oops! You've made a mistake here:");

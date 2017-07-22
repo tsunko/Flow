@@ -7,7 +7,10 @@ import ai.seitok.flow.env.Channel;
 import ai.seitok.flow.env.Invoker;
 import ai.seitok.flow.interp.Interpreters;
 import ai.seitok.flow.test.mock.*;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -80,7 +83,7 @@ public class FlowTest {
         Optional<TestCommandClass> loaded = Faucet.loadClass(TestCommandClass.class);
         Assert.assertTrue(loaded.isPresent());
 
-        Faucet.process("test", mockInvokers[0], new StringFlow(new String[0]));
+        Faucet.process("test", mockInvokers[0], mockChannel, new StringFlow(new String[0]));
         String messageRecv = ((TestInvoker)mockInvokers[0]).consumeMessage();
         Assert.assertNotNull(messageRecv);
         Assert.assertEquals(messageRecv, TestCommandClass.TEST_MESSAGE);
@@ -91,7 +94,7 @@ public class FlowTest {
         Optional<TestCommandClass> loaded = Faucet.loadClass(TestCommandClass.class);
         Assert.assertTrue(loaded.isPresent());
 
-        Faucet.process("tset", mockInvokers[0], new StringFlow(new String[0]));
+        Faucet.process("tset", mockInvokers[0], mockChannel, new StringFlow(new String[0]));
         String messageRecv = ((TestInvoker)mockInvokers[0]).consumeMessage();
         Assert.assertNotNull(messageRecv);
         Assert.assertEquals(messageRecv, TestCommandClass.TEST_MESSAGE);
@@ -102,7 +105,7 @@ public class FlowTest {
         Optional<TestCommandClass> loaded = Faucet.loadClass(TestCommandClass.class);
         Assert.assertTrue(loaded.isPresent());
 
-        Faucet.process("testWithParams", mockInvokers[0], new StringFlow(new String[]{"notAnInt longerThan1Character"}));
+        Faucet.process("testWithParams", mockInvokers[0], mockChannel, new StringFlow(new String[]{"notAnInt longerThan1Character"}));
         String failMessageRecv = ((TestInvoker)mockInvokers[0]).consumeMessage();
         Assert.assertNotNull(failMessageRecv);
         Assert.assertEquals("Oops! You've made a mistake here:", failMessageRecv);
@@ -113,9 +116,9 @@ public class FlowTest {
         Optional<TestCommandClassWithSubcommands> loaded = Faucet.loadClass(TestCommandClassWithSubcommands.class);
         Assert.assertTrue(loaded.isPresent());
 
-        Faucet.process("root", mockInvokers[0], new StringFlow(new String[]{"child1"}));
-        Faucet.process("root", mockInvokers[0], new StringFlow(new String[]{"child2"}));
-        Faucet.process("root", mockInvokers[0], new StringFlow(new String[]{"child3"}));
+        Faucet.process("root", mockInvokers[0], mockChannel, new StringFlow(new String[]{"child1"}));
+        Faucet.process("root", mockInvokers[0], mockChannel, new StringFlow(new String[]{"child2"}));
+        Faucet.process("root", mockInvokers[0], mockChannel, new StringFlow(new String[]{"child3"}));
 
         String msg1 = ((TestInvoker)mockInvokers[0]).consumeMessage();
         Assert.assertNotNull(msg1);
@@ -135,13 +138,13 @@ public class FlowTest {
         Optional<TestCommandClass> loaded = Faucet.loadClass(TestCommandClass.class);
         Assert.assertTrue(loaded.isPresent());
 
-        Faucet.process("test", mockInvokers[0], new StringFlow(new String[0]));
+        Faucet.process("test", mockInvokers[0], mockChannel, new StringFlow(new String[0]));
         String messageRecv = ((TestInvoker)mockInvokers[0]).consumeMessage();
         Assert.assertNotNull(messageRecv);
         Assert.assertEquals(messageRecv, TestCommandClass.TEST_MESSAGE);
 
         Faucet.unloadClass(TestCommandClass.class);
-        Assert.assertFalse(Faucet.process("test", mockInvokers[0], new StringFlow(new String[0])));
+        Assert.assertFalse(Faucet.process("test", mockInvokers[0], mockChannel, new StringFlow(new String[0])));
     }
 
     private static final SecureRandom random = new SecureRandom();
