@@ -6,3 +6,6 @@ out/
 
 # ignore all .iml files
 *.iml
+
+# ignore maven target folder
+target/
