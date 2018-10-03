@@ -3,7 +3,6 @@ package academy.hekiyou.flow.test.mock;
 import academy.hekiyou.flow.Flow;
 import academy.hekiyou.flow.FlowCommand;
 import academy.hekiyou.flow.FlowSplitCommand;
-import academy.hekiyou.flow.env.Channel;
 import academy.hekiyou.flow.env.Invoker;
 import academy.hekiyou.flow.test.FlowTest;
 
@@ -19,17 +18,17 @@ public class TestCommandClassWithSubcommands {
             usage = {"root", "<child1,child2,child3>"}
     )
     @FlowSplitCommand
-    public void root(Invoker invoker, Channel channel, Flow flow){}
+    public void root(Invoker invoker, Flow flow){}
 
-    public void root$child1(Invoker invoker, Channel channel, Flow flow){
+    public void root$child1(Invoker invoker, Flow flow){
         invoker.sendMessage(TEST_MESSAGE_1);
     }
 
-    public void root$child2(Invoker invoker, Channel channel, Flow flow){
+    public void root$child2(Invoker invoker, Flow flow){
         invoker.sendMessage(TEST_MESSAGE_2);
     }
 
-    public void root$child3(Invoker invoker, Channel channel, Flow flow){
+    public void root$child3(Invoker invoker, Flow flow){
         invoker.sendMessage(TEST_MESSAGE_3);
     }
 

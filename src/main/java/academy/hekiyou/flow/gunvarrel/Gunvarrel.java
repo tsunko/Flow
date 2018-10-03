@@ -44,7 +44,7 @@ public class Gunvarrel implements Loader, Executor {
             FlowCommand meta = method.getAnnotation(FlowCommand.class);
             String cmdName = method.getName();
             
-            if(!isValidMethodParams(method.getParameterTypes())){
+            if(!isValidMethodParams(method.getParameterTypes(), meta.requiresChannelSupport())){
                 throw new IllegalArgumentException("Badly formatted method: " + cmdName +
                         " (" + method.getDeclaringClass().getName() + ")");
             }
@@ -95,11 +95,17 @@ public class Gunvarrel implements Loader, Executor {
         return Stream.of(toUnreg).map(Command::getName).collect(Collectors.toList());
     }
 
-    private final boolean isValidMethodParams(Class<?>[] params){
-        return params.length == 3 &&
-                Invoker.class.isAssignableFrom(params[0]) &&
-                Channel.class.isAssignableFrom(params[1]) &&
-                Flow.class.isAssignableFrom(params[2]) ;
+    private boolean isValidMethodParams(Class<?>[] params, boolean needsChannelArg){
+        if(needsChannelArg){
+            return (params.length == 3 &&
+                    Invoker.class.isAssignableFrom(params[0]) &&
+                    Channel.class.isAssignableFrom(params[1]) &&
+                    Flow.class.isAssignableFrom(params[2]));
+        } else {
+            return (params.length == 2 &&
+                    Invoker.class.isAssignableFrom(params[0]) &&
+                    Flow.class.isAssignableFrom(params[1]));
+        }
     }
 
 }

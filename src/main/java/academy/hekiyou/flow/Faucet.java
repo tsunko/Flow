@@ -2,6 +2,7 @@ package academy.hekiyou.flow;
 
 import academy.hekiyou.flow.env.Channel;
 import academy.hekiyou.flow.env.Invoker;
+import academy.hekiyou.flow.env.NullChannel;
 import academy.hekiyou.flow.gunvarrel.Gunvarrel;
 import academy.hekiyou.flow.gunvarrel.Registerer;
 import academy.hekiyou.flow.gunvarrel.SimpleRegisterer;
@@ -30,6 +31,13 @@ public final class Faucet {
             registerer = new SimpleRegisterer(); // bad to assign parameters but w/e
         }
         instance.loader = new Gunvarrel(registerer);
+    }
+
+    /**
+     * Initializes the Flow library, passing null as the registerer.
+     */
+    public static void initialize(){
+        initialize(null);
     }
 
     /**
@@ -75,6 +83,19 @@ public final class Faucet {
         return instance.loader.findAndExecute(command, invoker, chan, flow);
     }
 
+    /**
+     * A variant of the <code>process(String command, Invoker invoker, Channel chan, Flow flow)</code> that does
+     * not require a channel to be supplied. This is the same as calling:
+     * <code>process(command, invoker, NullChannel.NULL, flow)</code>
+     * @param command The command name to invoke
+     * @param invoker An instance/implementation of Invoker
+     * @param flow An instance/implementation of Flow
+     * @return <code>true</code> if the command was found and processed successfully, <code>false</code> otherwise
+     */
+    public static boolean process(String command, Invoker invoker, Flow flow){
+        return process(command, invoker, NullChannel.NULL, flow);
+    }
+
     public static Settings getSettings(){
         checkForInitialization();
         return instance.settings;
@@ -104,7 +125,7 @@ public final class Faucet {
         /**
          * Represents the message that is sent when a command errors during argument processing by bad usage.
          */
-        public String usageError = "Error in executing command.";
+        public String usageError = "Usage error.";
 
         /**
          * Represents the message that is sent in case of a permission error.
@@ -115,6 +136,8 @@ public final class Faucet {
          * Represents the message that is sent in the event the user uses an invalid subcommand.
          */
         public String invalidSubcommandError = "Invalid subcommand. Subcommands are: ";
+
+        private Settings(){}
 
     }
 

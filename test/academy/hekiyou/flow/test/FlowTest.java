@@ -108,7 +108,7 @@ public class FlowTest {
         Faucet.process("testWithParams", mockInvokers[0], mockChannel, new StringFlow(new String[]{"notAnInt longerThan1Character"}));
         String failMessageRecv = ((TestInvoker)mockInvokers[0]).consumeMessage();
         Assert.assertNotNull(failMessageRecv);
-        Assert.assertEquals("Oops! You've made a mistake here:", failMessageRecv);
+        Assert.assertEquals(Faucet.getSettings().usageError, failMessageRecv);
     }
 
     @Test

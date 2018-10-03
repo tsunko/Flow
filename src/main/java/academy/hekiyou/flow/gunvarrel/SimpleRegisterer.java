@@ -15,7 +15,7 @@ public class SimpleRegisterer implements Registerer {
     @Override
     public void register(Command command) {
         if(isRegistered(command.getName())){
-            throw new IllegalStateException("already registered");
+            throw new IllegalStateException("already registered " + command.getName());
         }
 
         registered.put(command.getName(), command);

@@ -25,10 +25,17 @@ class SplitCommand extends Command {
 
     @Override
     public void execute(Invoker invoker, Channel channel, Flow flow){
-        if(!checkPermission(invoker)) return;
+        if(!invoker.hasPermission(getMetadata().permission())){
+            invoker.sendMessage(Faucet.getSettings().permissionError);
+            return;
+        }
 
         try {
-            method.invoke(ref, invoker, channel, flow); // apply any changes the parent method to the invoker and flow (bad)
+            // apply any changes the parent method to the invoker and flow
+            // technically, this is probably bad design as the root command probably shouldn't modify the invoker
+            // however, in practice, it feels like the root command may need to perform prep with the invoker first
+            // and then its subcommand can take over
+            invokeMethodWithArguments(method, invoker, channel, flow);
         } catch (IllegalAccessException | InvocationTargetException e){
             e.printStackTrace();
         }
@@ -41,7 +48,8 @@ class SplitCommand extends Command {
         }
 
         try {
-            subMethod.invoke(ref, invoker, channel, flow); // now pass the maybe-modified invoker/flow to the sub-command method
+            // now pass the maybe-modified invoker/flow to the sub-command method
+            invokeMethodWithArguments(subMethod, invoker, channel, flow);
         } catch (IllegalAccessException | InvocationTargetException e){
             e.printStackTrace();
         }

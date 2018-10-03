@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Tags a method as being a "command method". Methods tagged as "FlowCommand" are loaded
- * via <code>Gunvarrel.load(TenkorePlugin plugin, Class klass)</code>.
+ * via <code>Faucet.loadClass(Class klass)</code>.
  */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)
@@ -32,5 +32,12 @@ public @interface FlowCommand {
      * @return An array of aliases for this command
      */
     String[] alias() default {};
+
+    /**
+     * If set to true, the command function is expected to contain a Channel (or subclass of) parameter.
+     * If false (default), the command is expected to <b>not</b> contain a Channel (or subclass of) parameter.
+     * @return Weather or not the command requires command/chat channels support.
+     */
+    boolean requiresChannelSupport() default false;
 
 }
